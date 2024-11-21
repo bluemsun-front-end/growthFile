@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import StudentsFile from '@/views/StudentsFile.vue';
+//import StudentsFile from '@/views/StudentsFile.vue';
 import index from '@/views/Login/index.vue';
+import NewFile from '@/views/new-file.vue';
 //创建路由器
 const router = createRouter({
     history: createWebHistory(),
@@ -10,12 +11,17 @@ const router = createRouter({
         {
             path: '/',
             name: 'index',
-            component: index
+            component: index,
         },
+        // {
+        //     name:'growthFile',
+        //     path:'/growthfile',
+        //     component:StudentsFile
+        // },
         {
-            name:'growthFile',
-            path:'/growthfile',
-            component:StudentsFile
+            path: '/new-file',
+            name: 'new-file',
+            component: NewFile,
         },
        
         {

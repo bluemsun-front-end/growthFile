@@ -93,7 +93,8 @@
   
           // 判断对象
           if(response.data.data.roles[0].roleName==="资助对象") 
-              router.push('/growthfile')
+              //router.push('/growthfile')
+            router.push('/new-file')
           //路由跳转到首页
           else
               router.push('/studentFiles')
