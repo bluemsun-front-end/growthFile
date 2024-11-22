@@ -125,6 +125,11 @@
             <el-table-column prop="experience" label="经历描述" minWidth="180"></el-table-column>
           </el-table>
         </el-tab-pane>
+        <el-button
+          style="display: block; margin: 0px auto; padding: 10px 20px"
+          @click="exportStudentInfo()"
+          >导出信息</el-button
+        >
       </el-tabs>
     </el-dialog>
   </div>
@@ -134,6 +139,7 @@
 import NavBar from './components/NavBar.vue'
 import SearchBox from './components/SearchBox.vue'
 import { onMounted, ref, provide } from 'vue'
+import axios from 'axios'
 import request from '@/api/request'
 import { de } from 'element-plus/es/locale'
 
@@ -149,9 +155,10 @@ const tableData = ref([])
 const selectedIds = ref([]) // 用来存储选中的学生ID
 const handleSelectionChange = (selection) => {
   // 提取选中行的学号（ID）
-  selectedIds.value = selection.map((student) => student.studentId)
+  selectedIds.value = selection.map((student) => student.id)
   console.log('选中的学生 ID:', selectedIds.value)
 }
+provide('selectedIds', selectedIds)
 
 const query = ref({
   pageNum: 1,
@@ -211,7 +218,53 @@ const getList = async (pageNum = 1, pageSize = query.value.pageSize, queryData: 
     loadings.value.table = false
   }
 }
+const token = localStorage.getItem('token')
+// 导出学生信息
+const viewedUserId = ref('') // 创建一个响应式变量来存储查看的学生的userId
 
+const handleViewDetail = async (row: any) => {
+  viewedUserId.value = row.userId // 获取点击的学生的userId
+  const res = await request.get(
+    'http://106.54.24.243:8080/grow/userInfo/detail?userId=' + row.userId,
+  )
+  studentRow.value = res.data.data.fundUserInfoVo
+  fundProjectVo.value = res.data.data.fundProjectVo
+  fundScholarshipVo.value = res.data.data.fundScholarshipVo
+  fundPunishVo.value = res.data.data.fundPunishVo
+  visible.value = true
+}
+
+const exportStudentInfo = async () => {
+  try {
+    const config = {
+      headers: {
+        Authorization: 'Bear ' + token,
+        clientid: localStorage.getItem('client_id'),
+        'Content-Type': 'application/json',
+      },
+    }
+    const params = {
+      userId: viewedUserId.value, // 使用查看的学生的userId
+    }
+    const response = await axios.get('http://106.54.24.243:8080/grow/userOwnInfo/exportAll', {
+      ...config,
+      params,
+      responseType: 'blob',
+    })
+
+    const blob = new Blob([response.data], { type: 'application/vnd.ms-excel' })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'student_info.xlsx' // 可以修改为从响应头中获取的文件名
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.error('导出信息时出错:', error)
+  }
+}
 const handleSizeChange = (val: number) => {
   getList(query.value.pageNum, val)
 }
@@ -233,21 +286,6 @@ const fundScholarshipVo = ref([])
 const fundProjectVo = ref([])
 const visible = ref(false)
 
-const handleViewDetail = async (row: any) => {
-  const res = await request.get(
-    'http://106.54.24.243:8080/grow/userInfo/detail?userId=' + row.userId,
-  )
-  studentRow.value = res.data.data.fundUserInfoVo
-  fundProjectVo.value = res.data.data.fundProjectVo
-  fundScholarshipVo.value = res.data.data.fundScholarshipVo
-  fundPunishVo.value = res.data.data.fundPunishVo
-  visible.value = true
-}
-
-const closeDialog = () => {
-  studentRow.value = {}
-  visible.value = false
-}
 // 生日
 const formatBirthday = (birthday: string): string => {
   return birthday.substring(0, 10)

@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, inject } from 'vue'
+import { reactive, inject, ref } from 'vue'
 import axios from 'axios'
 const authToken = localStorage.getItem('token')
 const token = `Bearer ${authToken}`
@@ -38,21 +38,49 @@ const onSearch = () => {
   //请求在这里
   emit('search', searchData)
 }
-
-const selectedIds = inject('selectedIds', [])
+const selectedIds = ref(inject('selectedIds', []))
 const exportInfo = async () => {
   try {
     const config = {
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: token,
         clientid: localStorage.getItem('client_id'),
+        'Content-Type': 'application/json',
       },
     }
     const params = {
-      userId: selectedIds,
-      // userId: selectedIds.value,
+      userId: selectedIds.value,
     }
-    await axios.post('http://106.54.24.243:8080/grow/userInfo/export', params, config)
+    const response = await axios.post(
+      'http://106.54.24.243:8080/grow/userOwnInfo/exportOne',
+      params,
+      {
+        ...config,
+        responseType: 'blob', // 确保响应类型为 Blob（二进制数据）
+      },
+    )
+
+    // 创建 Blob 对象
+    const blob = response.data
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    // 获取文件名，假设从响应头中获取
+    const disposition = response.headers['content-disposition']
+    let fileName = 'exported_file.xlsx' // 默认文件名
+    if (disposition) {
+      const fileNameMatch = disposition.match(/filename="(.+)"/)
+      if (fileNameMatch && fileNameMatch[1]) {
+        fileName = fileNameMatch[1]
+      }
+    }
+
+    link.download = fileName // 设置下载文件的名字
+    link.click() // 触发点击事件下载文件
+
+    // 释放 URL 对象
+    window.URL.revokeObjectURL(url)
   } catch (error) {
     console.error('导出信息时出错:', error)
   }
