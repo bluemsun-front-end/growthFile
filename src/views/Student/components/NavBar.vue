@@ -4,16 +4,15 @@
   </div>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 .header {
   background-color: rgba(255, 255, 255, 0.39);
-  color: #007bff; 
-  text-align: center; 
+  color: #007bff;
+  text-align: center;
   padding: 20px 0;
-  font-size: 20px; 
+  font-size: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   position: relative;

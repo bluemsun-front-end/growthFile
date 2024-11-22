@@ -6,7 +6,7 @@
     <el-input v-model="searchData.major" class="search-input" placeholder="专业" clearable />
     <el-input v-model="searchData.degree" class="search-input" placeholder="学位" clearable />
     <el-button @click="reset" type="primary">重置</el-button>
-    <el-button @click="onSearch" type="primary" style="margin-left: 0px;">搜索</el-button>
+    <el-button @click="onSearch" type="primary" style="margin-left: 0px">搜索</el-button>
     <div class="box-right">
       <el-button @click="exportInfo" type="primary" class="export-button">导出信息</el-button>
     </div>
@@ -14,45 +14,49 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
-import axios from 'axios';
-const authToken = localStorage.getItem('token');
-const token = `Bearer ${authToken}`;
-const emit = defineEmits(['search']);
+import { reactive, inject } from 'vue'
+import axios from 'axios'
+const authToken = localStorage.getItem('token')
+const token = `Bearer ${authToken}`
+const emit = defineEmits(['search'])
 const searchData = reactive({
   grade: '',
   name: '',
   studentId: '',
   major: '',
   degree: '',
-});
+})
 
 const reset = () => {
-  searchData.grade = '';
-  searchData.name = '';
-  searchData.studentId = '';
-  searchData.major = '';
-  searchData.degree = '';
-};
+  searchData.grade = ''
+  searchData.name = ''
+  searchData.studentId = ''
+  searchData.major = ''
+  searchData.degree = ''
+}
 const onSearch = () => {
   //请求在这里
-  emit('search', searchData);
-};
+  emit('search', searchData)
+}
+
+const selectedIds = inject('selectedIds', [])
 const exportInfo = async () => {
   try {
     const config = {
       headers: {
-        'Authorization': 'Bearer '+token,
-      }
-    };
+        Authorization: 'Bearer ' + token,
+        clientid: localStorage.getItem('client_id'),
+      },
+    }
     const params = {
-      userId:28,
-    };
-    await axios.get('http://mxt.nat300.top/grow/userInfo/export', { params, ...config });
+      userId: selectedIds,
+      // userId: selectedIds.value,
+    }
+    await axios.post('http://106.54.24.243:8080/grow/userInfo/export', params, config)
   } catch (error) {
-    console.error('Error during export:', error);
+    console.error('导出信息时出错:', error)
   }
-};
+}
 </script>
 
 <style scoped>
