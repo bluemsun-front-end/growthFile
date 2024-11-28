@@ -1,10 +1,42 @@
 <template>
   <div class="header">
     <h1 class="title">个人成长档案</h1>
+    <button class="exit-btn" @click="handleLogout()">退出</button>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Axios from '@/views/Axios'
+import { ElMessage } from 'element-plus'
+      
+const handleLogout = async () => {
+  console.log('退出登录')
+  try {
+    const response = await Axios.post('http://106.54.24.243:8080/auth/logout', {
+     
+    })
+    if (response.data.code === 200) {
+      ElMessage.success('退出成功！')
+
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
+      localStorage.removeItem('client_id')
+      // 等待2秒跳转到登录
+      setTimeout(() => {
+        window.location.href = `http://localhost:5173`
+
+      }, 60)
+    } else {
+      ElMessage.error(response.data.msg + '!')
+    }
+  // eslint-disable-next-line no-unused-vars
+  } catch (error) {
+    ElMessage.error('请求失败！')
+  }
+}
+
+
+</script>
 
 <style scoped>
 .header {
@@ -22,5 +54,30 @@
 
 .title {
   margin: 0;
+}
+
+.exit-btn {
+  position: absolute;
+  top: 55%;
+  right: 50px;
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.exit-btn:hover {
+  background-color: #c0392b;
+}
+
+.exit-btn:active {
+  background-color: #a93226;
 }
 </style>
