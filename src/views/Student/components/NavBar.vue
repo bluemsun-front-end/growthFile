@@ -37,7 +37,6 @@ const handleLogout = async () => {
 
 
 </script>
-
 <style scoped>
 .header {
   background-color: rgba(255, 255, 255, 0.39);

@@ -5,6 +5,7 @@ import index from '@/views/Login/index.vue';
 import NewFile from '@/views/new-file.vue';
 import StudentsFile from '@/views/StudentsFile.vue';
 import { ElMessage } from 'element-plus';
+import NotFound from '@/views/NotFound/index.vue'
 //创建路由器
 const router = createRouter({
     history: createWebHistory(),
@@ -14,18 +15,24 @@ const router = createRouter({
             path: '/',
             name: 'index',
             component: index,
+         
         },
         {
             path: '/new-file',
             name: 'new-file',
             component: NewFile,
+            meta: { role: ['资助对象']}
         },
        
         {
             path: '/studentFiles',
             name: 'studentFiles',
             component: import('@/views/Student/index.vue'),
-            meta: { role: ['老师', '超级管理员'] }
+            meta: { role: ['老师'] }
+        },
+        {
+          path: '/:pathMatch(.*)*', // 捕捉所有不存在的路径
+          component: NotFound, // 显示 404 页面
         },
     ]
 })
@@ -55,7 +62,7 @@ router.beforeEach(async (to, from, next) => {
       const requiredRoles = to.meta?.role as string[] | undefined; // 类型断言
       if (requiredRoles && !requiredRoles.includes(storedRole)) {
         ElMessage.error('无访问权限');
-        router.push('/new-file')
+       window.location.href = `http://localhost:5173/framework`
       }
   
       next();
