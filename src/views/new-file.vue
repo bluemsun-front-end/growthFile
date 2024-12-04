@@ -1,4 +1,3 @@
-
 <template>
   <div>
       <NavBar />
@@ -1202,6 +1201,7 @@ default:
 .el-table tr {
     background-color: var(--el-table-tr-bg-color);
     height:55px;
+    
 }
 
 .tab-content{
@@ -1213,15 +1213,14 @@ default:
   margin-right:2vw;
   overflow: auto;
   background-color:#fafafa;
+  border-radius: 10px;
 }
 .el-descriptions {
     margin-top: 20px;
     margin-left:1vw;
     margin-right:1vw;
 }
-.background1{
-  background: #f7f3f3;
-}
+
 .el-tabs--border-card {
       background: var(--el-bg-color-overlay);
  }
@@ -1235,6 +1234,7 @@ default:
 .el-tabs {
   --el-tabs-header-height: 55px;
   display: flex;
+  border-radius: 10px;
  }
  .el-radio-button{
   height:150px;
@@ -1247,6 +1247,7 @@ default:
   margin-left:4vw;
   margin-right:4vw;
   margin-top:3px;
+  border-radius: 10px;
 }
   .el-descriptions__cell{
       width: 10px;
@@ -1286,6 +1287,7 @@ default:
   align-items: center;
   justify-content:space-around;
   flex-wrap:wrap;
+  border-radius: 10px;
 }
 /* 遮罩层样式 */
 .overlay {
@@ -1299,6 +1301,7 @@ default:
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 .dialog-content {
   max-height: 80vh; 
@@ -1332,9 +1335,11 @@ flex-wrap: wrap;
 width: 21vw;
 margin-right: 0;
 padding:10px;
+
 }
 h3{
 padding-top:5px;
+
 }
 
 .change{
@@ -1452,4 +1457,6 @@ element.style {
     height: 100%;
     width: 100%;
 }
+
+
 </style>

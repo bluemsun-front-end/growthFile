@@ -6,8 +6,12 @@ import { createPinia } from 'pinia'
 import router from './router/index'
 import App from './App.vue'
 import clearLocalStorageMixin from './mixins/clearLocalStorage';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const app = createApp(App)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 const pinia = createPinia()
 app.use(ElementPlus, { locale: zhCn })
 // 路由

@@ -801,4 +801,6 @@ const formatEthnicity = (code: string): string => {
 .custom-descriptions .el-descriptions__label {
   width: 200px;
 }
+
+
 </style>

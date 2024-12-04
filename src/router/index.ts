@@ -11,12 +11,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         // 个人成长档案
-        {
-            path: '/',
-            name: 'index',
-            component: index,
-         
-        },
+   
         {
             path: '/new-file',
             name: 'new-file',
@@ -54,7 +49,7 @@ router.beforeEach(async (to, from, next) => {
       const isLoggedIn = await isLogin();
       if (!isLoggedIn && to.path !== '/') {
         const redirectUrl = `${window.location.origin}${to.fullPath}`;
-        return (window.location.href = `http://localhost:5173/?redirect=${redirectUrl}`);
+        return (window.location.href = `http://106.54.24.243:5173/?redirect=${redirectUrl}`);
       }
   
       // 验证权限
@@ -62,13 +57,13 @@ router.beforeEach(async (to, from, next) => {
       const requiredRoles = to.meta?.role as string[] | undefined; // 类型断言
       if (requiredRoles && !requiredRoles.includes(storedRole)) {
         ElMessage.error('无访问权限');
-       window.location.href = `http://localhost:5173/framework`
+       window.location.href = `http://106.54.24.243:5173/framework`
       }
   
       next();
     } catch (error) {
       console.error('导航守卫出错:', error);
-      next('/'); // 默认跳转到登录页
+      window.location.href=' http://106.54.24.243:5173'
     }
   });
   

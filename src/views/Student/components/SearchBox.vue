@@ -94,11 +94,11 @@ const exportInfo = async () => {
   gap: 10px;
   padding: 20px;
   background-color: #f0f4f8;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .search-input {
-  width: 150px;
+  width: 300px;
 }
 
 .box-right {

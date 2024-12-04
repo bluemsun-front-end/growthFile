@@ -13,7 +13,7 @@
  
   
   const goHome = () => {
-    window.location.href='http://localhost:5173/'
+    window.location.href='http://106.54.24.243:5173/'
   };
   </script>
   
